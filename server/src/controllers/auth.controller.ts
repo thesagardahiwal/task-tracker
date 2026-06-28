@@ -1,12 +1,12 @@
-import { Request, Response } from 'express';
+import { Request, Response, CookieOptions } from 'express';
 import { AuthService } from '../services/auth.service';
 
 const setCookies = (res: Response, accessToken: string, refreshToken: string) => {
   const isProd = process.env.NODE_ENV === 'production';
-  const cookieOptions = {
+  const cookieOptions: CookieOptions = {
     httpOnly: true,
     secure: isProd,
-    sameSite: isProd ? 'none' : ('lax' as const),
+    sameSite: isProd ? 'none' : 'lax',
   };
 
   res.cookie('accessToken', accessToken, {
@@ -63,10 +63,10 @@ export const login = async (req: Request, res: Response) => {
 
 export const logout = async (req: Request, res: Response) => {
   const isProd = process.env.NODE_ENV === 'production';
-  const cookieOptions = {
+  const cookieOptions: CookieOptions = {
     httpOnly: true,
     secure: isProd,
-    sameSite: isProd ? 'none' : ('lax' as const),
+    sameSite: isProd ? 'none' : 'lax',
     expires: new Date(0),
   };
 
