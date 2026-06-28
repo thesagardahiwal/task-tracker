@@ -20,8 +20,6 @@ services:
       context: ./server
       dockerfile: Dockerfile
     container_name: tasktracker-api
-    ports:
-      - "5001:5001"
     environment:
       - NODE_ENV=production
       - PORT=5001
