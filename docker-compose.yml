@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongo:
+    image: mongo:latest
+    container_name: tasktracker-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    restart: unless-stopped
+
+  # Backend Node API
+  api:
+    build: 
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: tasktracker-api
+    ports:
+      - "5001:5001"
+    environment:
+      - NODE_ENV=production
+      - PORT=5001
+      - MONGODB_URI=mongodb://admin:password@mongo:27017/tasktracker?authSource=admin
+      - JWT_SECRET=change-this-secret-in-production
+      - JWT_EXPIRES_IN=7d
+      - FRONTEND_URL=http://localhost
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+  # Frontend Nginx Server
+  web:
+    build: 
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: tasktracker-web
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  mongo-data:
