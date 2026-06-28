@@ -4,14 +4,14 @@ import { CreateTaskDTO, UpdateTaskDTO } from '../../../types/task';
 import { toast } from 'sonner';
 
 export const TASK_KEYS = {
-  all: ['tasks'] as const,
+  all: (queryString: string = '') => ['tasks', queryString] as const,
   detail: (id: string) => ['tasks', id] as const,
 };
 
-export function useTasks() {
+export function useTasks(queryString: string = '') {
   return useQuery({
-    queryKey: TASK_KEYS.all,
-    queryFn: taskApi.getTasks,
+    queryKey: TASK_KEYS.all(queryString),
+    queryFn: () => taskApi.getTasks(queryString),
   });
 }
 
@@ -22,7 +22,7 @@ export function useCreateTask() {
     mutationFn: (data: CreateTaskDTO) => taskApi.createTask(data),
     onSuccess: () => {
       toast.success('Task created successfully');
-      queryClient.invalidateQueries({ queryKey: TASK_KEYS.all });
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || 'Failed to create task');
@@ -37,7 +37,7 @@ export function useUpdateTask() {
     mutationFn: ({ id, data }: { id: string; data: UpdateTaskDTO }) => taskApi.updateTask(id, data),
     onSuccess: () => {
       toast.success('Task updated successfully');
-      queryClient.invalidateQueries({ queryKey: TASK_KEYS.all });
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || 'Failed to update task');
@@ -52,7 +52,7 @@ export function useDeleteTask() {
     mutationFn: (id: string) => taskApi.deleteTask(id),
     onSuccess: () => {
       toast.success('Task deleted successfully');
-      queryClient.invalidateQueries({ queryKey: TASK_KEYS.all });
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || 'Failed to delete task');

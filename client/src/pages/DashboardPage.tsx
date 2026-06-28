@@ -7,10 +7,13 @@ import { EmptyState } from '../components/ui/EmptyState';
 import { Skeleton } from '../components/ui/Skeleton';
 import { useTasks, useDeleteTask } from '../features/tasks/hooks/useTasks';
 import { TaskModal } from '../features/tasks/components/TaskModal';
+import { TaskFilters } from '../features/tasks/components/TaskFilters';
 import { Task } from '../types/task';
+import { useSearchParams } from 'react-router';
 
 export const DashboardPage: React.FC = () => {
-  const { data: tasks = [], isLoading, isError } = useTasks();
+  const [searchParams] = useSearchParams();
+  const { data: tasks = [], isLoading, isError } = useTasks(searchParams.toString());
   const deleteMutation = useDeleteTask();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -100,8 +103,10 @@ export const DashboardPage: React.FC = () => {
         />
       </div>
 
+      <TaskFilters />
+
       <div className="space-y-4">
-        <h3 className="text-xl font-semibold">Recent Tasks</h3>
+        <h3 className="text-xl font-semibold">Tasks</h3>
         {isLoading ? (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3].map((i) => (
