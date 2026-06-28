@@ -13,10 +13,10 @@ export interface ISetting extends Document {
 
 const SettingSchema: Schema = new Schema(
   {
-    // Since we don't have auth, we use a single document or a fixed user string
     userId: {
-      type: String,
-      default: 'default_user',
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
       unique: true,
     },
     theme: {

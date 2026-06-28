@@ -4,7 +4,7 @@ import { dashboardService } from '../services/dashboard.service';
 
 export const getDashboardSummary = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const data = await dashboardService.getSummary();
+    const data = await dashboardService.getSummary(req.user!.id);
 
     res.status(200).json({
       success: true,

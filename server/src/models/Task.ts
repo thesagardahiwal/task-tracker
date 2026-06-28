@@ -5,6 +5,12 @@ export interface ITaskDocument extends ITask, Document {}
 
 const TaskSchema: Schema = new Schema(
   {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+      index: true,
+    },
     title: {
       type: String,
       required: [true, 'Task title is required'],

@@ -1,9 +1,24 @@
 import React, { useState } from 'react';
 import { Search } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router';
 
 export const NavbarSearch: React.FC = () => {
   const [isFocused, setIsFocused] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+  const navigate = useNavigate();
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      if (searchValue.trim()) {
+        navigate(`/tasks?search=${encodeURIComponent(searchValue.trim())}`);
+        setSearchValue(''); // Optional: clear after search or keep it
+        e.currentTarget.blur();
+      } else {
+        navigate('/tasks');
+      }
+    }
+  };
 
   return (
     <div className="relative group hidden md:flex items-center">
@@ -24,6 +39,9 @@ export const NavbarSearch: React.FC = () => {
         <input
           type="text"
           placeholder="Search tasks..."
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          onKeyDown={handleKeyDown}
           className="flex-1 w-full bg-transparent text-sm text-[var(--color-foreground)] outline-none placeholder:text-[var(--color-muted)]"
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}

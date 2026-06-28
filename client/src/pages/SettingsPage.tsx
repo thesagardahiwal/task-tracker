@@ -33,7 +33,7 @@ export const SettingsPage: React.FC = () => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.3 }}
-      className="space-y-8 pb-12 max-w-4xl"
+      className="space-y-8 mx-auto pb-12 max-w-4xl"
     >
       <div>
         <h2 className="text-3xl font-bold tracking-tight">Settings</h2>

@@ -3,7 +3,7 @@ import { asyncHandler } from '../utils/asyncHandler';
 import { settingsService } from '../services/settings.service';
 
 export const getSettings = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-  const data = await settingsService.getSettings();
+  const data = await settingsService.getSettings(req.user!.id);
 
   res.status(200).json({
     success: true,
@@ -14,7 +14,7 @@ export const getSettings = asyncHandler(async (req: Request, res: Response, next
 
 export const updateSettings = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const data = await settingsService.updateSettings(req.body);
+    const data = await settingsService.updateSettings(req.user!.id, req.body);
 
     res.status(200).json({
       success: true,

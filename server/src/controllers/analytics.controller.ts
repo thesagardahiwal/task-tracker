@@ -4,7 +4,7 @@ import { analyticsService } from '../services/analytics.service';
 
 export const getAnalytics = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
-    const data = await analyticsService.getAnalytics();
+    const data = await analyticsService.getAnalytics(req.user!.id);
 
     res.status(200).json({
       success: true,

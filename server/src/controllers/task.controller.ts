@@ -3,7 +3,7 @@ import { taskService } from '../services/task.service';
 import { asyncHandler } from '../utils/asyncHandler';
 
 export const getTasks = asyncHandler(async (req: Request, res: Response) => {
-  const result = await taskService.getTasks(req.query);
+  const result = await taskService.getTasks(req.user!.id, req.query);
 
   res.status(200).json({
     success: true,
@@ -13,7 +13,7 @@ export const getTasks = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const getTask = asyncHandler(async (req: Request, res: Response) => {
-  const task = await taskService.getTaskById(req.params.id as string);
+  const task = await taskService.getTaskById(req.params.id as string, req.user!.id);
 
   res.status(200).json({
     success: true,
@@ -23,7 +23,7 @@ export const getTask = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const createTask = asyncHandler(async (req: Request, res: Response) => {
-  const task = await taskService.createTask(req.body);
+  const task = await taskService.createTask(req.user!.id, req.body);
 
   res.status(201).json({
     success: true,
@@ -33,7 +33,7 @@ export const createTask = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const updateTask = asyncHandler(async (req: Request, res: Response) => {
-  const task = await taskService.updateTask(req.params.id as string, req.body);
+  const task = await taskService.updateTask(req.params.id as string, req.user!.id, req.body);
 
   res.status(200).json({
     success: true,
@@ -43,7 +43,7 @@ export const updateTask = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const deleteTask = asyncHandler(async (req: Request, res: Response) => {
-  await taskService.deleteTask(req.params.id as string);
+  await taskService.deleteTask(req.params.id as string, req.user!.id);
 
   res.status(200).json({
     success: true,

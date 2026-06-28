@@ -1,26 +1,32 @@
 import Task from '../models/Task';
 import { TaskStatus } from '../interfaces/task.interface';
+import mongoose from 'mongoose';
 
 export class AnalyticsService {
-  async getAnalytics() {
+  async getAnalytics(userId: string) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
     const sevenDaysAgo = new Date(today);
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+
     // Distribution by Status
     const statusDistribution = await Task.aggregate([
+      { $match: { userId: userObjectId } },
       { $group: { _id: '$status', count: { $sum: 1 } } },
     ]);
 
     // Distribution by Priority
     const priorityDistribution = await Task.aggregate([
+      { $match: { userId: userObjectId } },
       { $group: { _id: '$priority', count: { $sum: 1 } } },
     ]);
 
     // Trend: Completed vs Created in the last 7 days
     const recentTasks = await Task.find({
+      userId,
       createdAt: { $gte: sevenDaysAgo },
     });
     const tasksCreatedThisWeek = recentTasks.length;
@@ -29,11 +35,12 @@ export class AnalyticsService {
     ).length;
 
     // Total tasks for global percentages
-    const totalTasks = await Task.countDocuments();
-    const completedTasks = await Task.countDocuments({ status: TaskStatus.COMPLETED });
+    const totalTasks = await Task.countDocuments({ userId });
+    const completedTasks = await Task.countDocuments({ userId, status: TaskStatus.COMPLETED });
 
     // Overdue tasks
     const overdueTasks = await Task.countDocuments({
+      userId,
       status: { $ne: TaskStatus.COMPLETED },
       dueDate: { $lt: today, $ne: null },
     });
@@ -51,6 +58,7 @@ export class AnalyticsService {
     const completionTrendChart = await Task.aggregate([
       {
         $match: {
+          userId: userObjectId,
           status: TaskStatus.COMPLETED,
           updatedAt: { $gte: sevenDaysAgo },
         },

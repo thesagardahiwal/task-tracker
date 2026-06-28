@@ -14,10 +14,12 @@ import { Button } from '../components/ui/Button';
 import { Skeleton } from '../components/ui/Skeleton';
 import { useDashboardSummary } from '../features/dashboard/hooks/useDashboard';
 import { useNavigate } from 'react-router';
+import { useAuth } from '../contexts/AuthContext';
 
 export const DashboardPage: React.FC = () => {
   const { data: summary, isLoading, isError } = useDashboardSummary();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   if (isError) {
     return (
@@ -42,9 +44,7 @@ export const DashboardPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-          <p className="text-[var(--color-muted)]">
-            Welcome back! Here's an overview of your projects.
-          </p>
+          <p className="text-[var(--color-muted)]">Welcome back, {user?.firstName} 👋</p>
         </div>
       </div>
 
