@@ -79,7 +79,7 @@ This project includes a `docker-compose.yml` file for easy production orchestrat
    In the root directory, run:
 
    ```bash
-   docker-compose up -d --build
+   docker compose up -d --build
    ```
 
 2. **Architecture behind Docker:**
