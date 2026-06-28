@@ -1,5 +1,5 @@
-import React from 'react';
 import { Outlet } from 'react-router';
+import { ThemeToggle } from '../components/ui/ThemeToggle';
 
 export const AppLayout: React.FC = () => {
   return (
@@ -7,7 +7,7 @@ export const AppLayout: React.FC = () => {
       <header className="border-b border-[var(--color-border)] p-4 bg-[var(--color-secondary)]">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <h1 className="text-xl font-bold">TaskTracker</h1>
-          {/* We will add theme toggle or other global header items here later */}
+          <ThemeToggle />
         </div>
       </header>
       <main className="flex-1 max-w-7xl mx-auto w-full p-4 sm:p-6 lg:p-8">

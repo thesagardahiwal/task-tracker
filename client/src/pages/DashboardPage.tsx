@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { LayoutDashboard, CheckCircle, Clock, AlertCircle, Plus } from 'lucide-react';
 import { StatsCard } from '../features/tasks/components/StatsCard';
 import { TaskCard } from '../features/tasks/components/TaskCard';
@@ -50,7 +51,13 @@ export const DashboardPage: React.FC = () => {
   }
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.3 }}
+      className="space-y-8"
+    >
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
@@ -142,6 +149,6 @@ export const DashboardPage: React.FC = () => {
       </div>
 
       <TaskModal isOpen={isModalOpen} onClose={handleCloseModal} task={selectedTask} />
-    </div>
+    </motion.div>
   );
 };
