@@ -6,6 +6,7 @@ import compression from 'compression';
 
 import { errorHandler } from './middleware/errorHandler';
 import { notFound } from './middleware/notFound';
+import taskRoutes from './routes/task.route';
 
 const app: Application = express();
 
@@ -24,6 +25,8 @@ if (process.env.NODE_ENV === 'development') {
 app.get('/api/health', (req, res) => {
   res.status(200).json({ success: true, message: 'API is running' });
 });
+
+app.use('/api/tasks', taskRoutes);
 
 // Fallback error handlers
 app.use(notFound);
