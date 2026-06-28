@@ -5,44 +5,46 @@ import { TaskCard } from '../features/tasks/components/TaskCard';
 import { Button } from '../components/ui/Button';
 import { EmptyState } from '../components/ui/EmptyState';
 import { Skeleton } from '../components/ui/Skeleton';
-
-// Temporary mock data until Phase 9
-const mockTasks: any[] = [
-  {
-    _id: '1',
-    title: 'Design API Architecture',
-    description: 'Create the initial REST API endpoints structure and Swagger documentation.',
-    status: 'COMPLETED',
-    priority: 'HIGH',
-    dueDate: '2023-11-20T00:00:00.000Z',
-    createdAt: '2023-11-10T00:00:00.000Z',
-  },
-  {
-    _id: '2',
-    title: 'Implement Authentication',
-    description: 'Setup JWT based authentication with refresh tokens.',
-    status: 'IN_PROGRESS',
-    priority: 'HIGH',
-    dueDate: new Date(Date.now() + 86400000 * 2).toISOString(),
-    createdAt: new Date().toISOString(),
-  },
-  {
-    _id: '3',
-    title: 'Frontend Dashboard Layout',
-    description: 'Build the responsive grid layout using Tailwind CSS.',
-    status: 'PENDING',
-    priority: 'MEDIUM',
-    createdAt: new Date().toISOString(),
-  },
-];
+import { useTasks, useDeleteTask } from '../features/tasks/hooks/useTasks';
+import { TaskModal } from '../features/tasks/components/TaskModal';
+import { Task } from '../types/task';
 
 export const DashboardPage: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const tasks = mockTasks; // Will be replaced by useQuery
+  const { data: tasks = [], isLoading, isError } = useTasks();
+  const deleteMutation = useDeleteTask();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
   const handleCreateTask = () => {
-    console.log('Create task clicked');
+    setSelectedTask(null);
+    setIsModalOpen(true);
   };
+
+  const handleEditTask = (task: Task) => {
+    setSelectedTask(task);
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteTask = (id: string) => {
+    if (window.confirm('Are you sure you want to delete this task?')) {
+      deleteMutation.mutate(id);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    // Slight delay to allow modal out animation before clearing data
+    setTimeout(() => setSelectedTask(null), 200);
+  };
+
+  if (isError) {
+    return (
+      <div className="flex h-[50vh] items-center justify-center text-red-500">
+        Failed to load tasks. Please ensure the backend is running.
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
@@ -111,9 +113,9 @@ export const DashboardPage: React.FC = () => {
             {tasks.map((task) => (
               <TaskCard
                 key={task._id}
-                task={task}
-                onEdit={(t) => console.log('Edit', t)}
-                onDelete={(id) => console.log('Delete', id)}
+                task={task as any}
+                onEdit={() => handleEditTask(task)}
+                onDelete={() => handleDeleteTask(task._id)}
               />
             ))}
           </div>
@@ -133,6 +135,8 @@ export const DashboardPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      <TaskModal isOpen={isModalOpen} onClose={handleCloseModal} task={selectedTask} />
     </div>
   );
 };

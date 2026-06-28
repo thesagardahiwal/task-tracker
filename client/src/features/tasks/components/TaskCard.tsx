@@ -5,25 +5,16 @@ import { Card, CardContent, CardFooter, CardHeader } from '../../../components/u
 import { Badge } from '../../../components/ui/Badge';
 import { Button } from '../../../components/ui/Button';
 
-// Temporary mock interface (will use real one in Phase 9)
-interface TaskMock {
-  _id: string;
-  title: string;
-  description?: string;
-  status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
-  priority: 'LOW' | 'MEDIUM' | 'HIGH';
-  dueDate?: string;
-  createdAt: string;
-}
+import { Task } from '../../../types/task';
 
 interface TaskCardProps {
-  task: TaskMock;
-  onEdit?: (task: TaskMock) => void;
+  task: Task;
+  onEdit?: (task: Task) => void;
   onDelete?: (id: string) => void;
 }
 
 export const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete }) => {
-  const getStatusConfig = (status: TaskMock['status']) => {
+  const getStatusConfig = (status: Task['status']) => {
     switch (status) {
       case 'COMPLETED':
         return { variant: 'success' as const, label: 'Completed', icon: CheckCircle2 };
@@ -34,7 +25,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete }) =>
     }
   };
 
-  const getPriorityConfig = (priority: TaskMock['priority']) => {
+  const getPriorityConfig = (priority: Task['priority']) => {
     switch (priority) {
       case 'HIGH':
         return { variant: 'error' as const, label: 'High' };
