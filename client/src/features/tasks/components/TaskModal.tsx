@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
-import { Task, CreateTaskDTO, UpdateTaskDTO } from '../../../types/task';
+import type { Task, CreateTaskDTO, UpdateTaskDTO } from '../../../types/task';
 import { useCreateTask, useUpdateTask } from '../hooks/useTasks';
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';

@@ -1,6 +1,6 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query';
 import { taskApi } from '../api/task.api';
-import { CreateTaskDTO, UpdateTaskDTO } from '../../../types/task';
+import type { CreateTaskDTO, UpdateTaskDTO } from '../../../types/task';
 import { toast } from 'sonner';
 
 export const TASK_KEYS = {
@@ -12,6 +12,7 @@ export function useTasks(queryString: string = '') {
   return useQuery({
     queryKey: TASK_KEYS.all(queryString),
     queryFn: () => taskApi.getTasks(queryString),
+    placeholderData: keepPreviousData,
   });
 }
 

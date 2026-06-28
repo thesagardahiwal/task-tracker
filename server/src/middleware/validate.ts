@@ -12,8 +12,9 @@ export const validate =
       return next();
     } catch (error) {
       if (error instanceof ZodError) {
-        const formattedErrors = (error as any).errors.map((e: any) => ({
-          field: e.path.join('.'),
+        const issues = error.issues || (error as any).errors || [];
+        const formattedErrors = issues.map((e: any) => ({
+          field: e.path ? e.path.join('.') : 'unknown',
           message: e.message,
         }));
 

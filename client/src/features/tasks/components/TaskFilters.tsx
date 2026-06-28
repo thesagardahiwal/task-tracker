@@ -3,13 +3,17 @@ import { useSearchParams } from 'react-router';
 import { Search } from 'lucide-react';
 import { Input } from '../../../components/ui/Input';
 import { Select } from '../../../components/ui/Select';
-import { Button } from '../../../components/ui/Button';
 
 export const TaskFilters: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Local state for search to debounce input
   const [searchValue, setSearchValue] = useState(searchParams.get('search') || '');
+
+  // Keep local search value in sync with URL if cleared from outside
+  useEffect(() => {
+    setSearchValue(searchParams.get('search') || '');
+  }, [searchParams]);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -38,19 +42,12 @@ export const TaskFilters: React.FC = () => {
     setSearchParams(newParams);
   };
 
-  const clearFilters = () => {
-    setSearchValue('');
-    setSearchParams(new URLSearchParams());
-  };
-
-  const activeFiltersCount = Array.from(searchParams.keys()).length;
-
   return (
-    <div className="flex flex-col sm:flex-row gap-4 mb-6 p-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-secondary)]">
+    <div className="flex flex-col sm:flex-row gap-4 mb-6">
       <div className="relative flex-1">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-muted)]" />
         <Input
-          className="pl-9"
+          className="pl-9 h-11 bg-[var(--color-background)] rounded-xl"
           placeholder="Search tasks..."
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
@@ -58,7 +55,7 @@ export const TaskFilters: React.FC = () => {
       </div>
       <div className="flex flex-col sm:flex-row gap-4">
         <Select
-          className="w-full sm:w-36"
+          className="w-full sm:w-36 h-11 bg-[var(--color-background)] rounded-xl"
           value={searchParams.get('status') || 'ALL'}
           onChange={(e) => handleFilterChange('status', e.target.value)}
           options={[
@@ -69,7 +66,7 @@ export const TaskFilters: React.FC = () => {
           ]}
         />
         <Select
-          className="w-full sm:w-36"
+          className="w-full sm:w-36 h-11 bg-[var(--color-background)] rounded-xl"
           value={searchParams.get('priority') || 'ALL'}
           onChange={(e) => handleFilterChange('priority', e.target.value)}
           options={[
@@ -80,7 +77,7 @@ export const TaskFilters: React.FC = () => {
           ]}
         />
         <Select
-          className="w-full sm:w-36"
+          className="w-full sm:w-36 h-11 bg-[var(--color-background)] rounded-xl"
           value={searchParams.get('sort') || 'createdAt'}
           onChange={(e) => handleFilterChange('sort', e.target.value)}
           options={[
@@ -89,11 +86,6 @@ export const TaskFilters: React.FC = () => {
             { label: 'Due Date Desc', value: '-dueDate' },
           ]}
         />
-        {activeFiltersCount > 0 && (
-          <Button variant="ghost" onClick={clearFilters} className="px-2">
-            Clear
-          </Button>
-        )}
       </div>
     </div>
   );

@@ -20,7 +20,7 @@ const TaskSchema: Schema = new Schema(
     status: {
       type: String,
       enum: Object.values(TaskStatus),
-      default: TaskStatus.TODO,
+      default: TaskStatus.PENDING,
     },
     priority: {
       type: String,
@@ -42,6 +42,6 @@ const TaskSchema: Schema = new Schema(
 TaskSchema.index({ status: 1 });
 TaskSchema.index({ priority: 1 });
 TaskSchema.index({ dueDate: 1 });
-TaskSchema.index({ title: 'text' }); // For text search
+TaskSchema.index({ title: 'text', description: 'text' }); // For text search
 
 export default mongoose.model<ITaskDocument>('Task', TaskSchema);

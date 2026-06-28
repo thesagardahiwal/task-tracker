@@ -5,7 +5,7 @@ import { Card, CardContent, CardFooter, CardHeader } from '../../../components/u
 import { Badge } from '../../../components/ui/Badge';
 import { Button } from '../../../components/ui/Button';
 
-import { Task } from '../../../types/task';
+import type { Task } from '../../../types/task';
 
 interface TaskCardProps {
   task: Task;

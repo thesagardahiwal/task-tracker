@@ -1,10 +1,12 @@
 import { api } from '../../../lib/axios';
-import { Task, CreateTaskDTO, UpdateTaskDTO } from '../../../types/task';
+import type { Task, CreateTaskDTO, UpdateTaskDTO } from '../../../types/task';
 
 export const taskApi = {
-  getTasks: async (queryString: string = ''): Promise<Task[]> => {
+  getTasks: async (
+    queryString: string = ''
+  ): Promise<{ tasks: Task[]; pagination: { total: number; page: number; pages: number } }> => {
     const response = await api.get(`/tasks?${queryString}`);
-    return response.data.data.tasks;
+    return response.data.data;
   },
   getTask: async (id: string): Promise<Task> => {
     const response = await api.get(`/tasks/${id}`);

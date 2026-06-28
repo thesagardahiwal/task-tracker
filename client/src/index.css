@@ -29,17 +29,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: dark) {
-  @theme {
-    --color-primary: #fafafa;
-    --color-primary-foreground: #171717;
-    --color-secondary: #262626;
-    --color-secondary-foreground: #fafafa;
-    --color-accent: #3b82f6;
-    --color-accent-foreground: #ffffff;
-    --color-muted: #a3a3a3;
-    --color-border: #404040;
-    --color-background: #0a0a0a;
-    --color-foreground: #fafafa;
-  }
+@custom-variant dark (&:is(.dark *));
+
+.dark {
+  --color-primary: #fafafa;
+  --color-primary-foreground: #171717;
+  --color-secondary: #262626;
+  --color-secondary-foreground: #fafafa;
+  --color-accent: #3b82f6;
+  --color-accent-foreground: #ffffff;
+  --color-muted: #a3a3a3;
+  --color-border: #404040;
+  --color-background: #0a0a0a;
+  --color-foreground: #fafafa;
 }
