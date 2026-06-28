@@ -25,7 +25,9 @@ services:
       - PORT=5001
       - MONGODB_URI=mongodb://admin:password@mongo:27017/tasktracker?authSource=admin
       - JWT_SECRET=change-this-secret-in-production
-      - JWT_EXPIRES_IN=7d
+      - JWT_EXPIRES_IN=15m
+      - JWT_REFRESH_SECRET=change-this-refresh-secret-in-production
+      - JWT_REFRESH_EXPIRES_IN=7d
       - FRONTEND_URL=http://localhost
     depends_on:
       - mongo
