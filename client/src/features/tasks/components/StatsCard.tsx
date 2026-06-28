@@ -29,7 +29,7 @@ export const StatsCard: React.FC<StatsCardProps> = ({
   };
 
   return (
-    <Card className="overflow-hidden relative group border-[var(--color-border)]/60">
+    <Card className="overflow-hidden relative h-full group border-[var(--color-border)]/60">
       <CardContent className="p-6">
         <div className="flex justify-between items-start">
           <div className="space-y-4">

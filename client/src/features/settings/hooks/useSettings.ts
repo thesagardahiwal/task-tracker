@@ -1,14 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { settingsApi, type SettingsData } from '../api/settings.api';
 import { toast } from 'sonner';
-
-export const SETTINGS_KEYS = {
-  all: ['settings'] as const,
-};
+import { QUERY_KEYS } from '../../../lib/queryKeys';
 
 export function useSettings() {
   return useQuery({
-    queryKey: SETTINGS_KEYS.all,
+    queryKey: QUERY_KEYS.settings.preferences,
     queryFn: settingsApi.getSettings,
   });
 }
@@ -19,7 +16,7 @@ export function useUpdateSettings() {
   return useMutation({
     mutationFn: (data: Partial<SettingsData>) => settingsApi.updateSettings(data),
     onSuccess: (newData) => {
-      queryClient.setQueryData(SETTINGS_KEYS.all, newData);
+      queryClient.setQueryData(QUERY_KEYS.settings.preferences, newData);
       toast.success('Settings saved successfully');
     },
     onError: () => {
