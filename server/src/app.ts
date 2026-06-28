@@ -16,6 +16,9 @@ import authRoutes from './routes/auth.route';
 
 const app: Application = express();
 
+// Trust proxy for secure cookies behind Render's load balancer
+app.set('trust proxy', 1);
+
 // Middlewares
 app.use(helmet());
 app.use(
